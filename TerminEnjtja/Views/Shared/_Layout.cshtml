@@ -1,0 +1,47 @@
+﻿<!-- Views/Shared/_Layout.cshtml -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Termin Enjtja</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-futbol"></i> Termin Enjtja</h1>
+
+            @if (ViewData.Model is DashboardViewModel dashboardModel)
+            {
+                <div class="stats-container">
+                    <div class="team-stats">
+                        <span class="team-name">ACI</span>
+                        <span class="wins"><i class="fas fa-trophy"></i> <span id="aciWins">@(dashboardModel.TeamAStats?.Wins ?? 0)</span></span>
+                        <span class="draws"><i class="fas fa-equals"></i> <span id="aciDraws">@(dashboardModel.TeamAStats?.Draws ?? 0)</span></span>
+                        <span class="losses"><i class="fas fa-times"></i> <span id="aciLosses">@(dashboardModel.TeamAStats?.Losses ?? 0)</span></span>
+                    </div>
+                    <div class="team-stats">
+                        <span class="team-name">BESI</span>
+                        <span class="wins"><i class="fas fa-trophy"></i> <span id="besiWins">@(dashboardModel.TeamBStats?.Wins ?? 0)</span></span>
+                        <span class="draws"><i class="fas fa-equals"></i> <span id="besiDraws">@(dashboardModel.TeamBStats?.Draws ?? 0)</span></span>
+                        <span class="losses"><i class="fas fa-times"></i> <span id="besiLosses">@(dashboardModel.TeamBStats?.Losses ?? 0)</span></span>
+                    </div>
+                </div>
+            }
+
+        </header>
+
+        <div class="content">
+            <div id="@(Context.Session.GetString("LoginType") == null ? "loginContainer" : "")">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

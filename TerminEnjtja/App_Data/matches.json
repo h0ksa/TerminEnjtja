@@ -1,0 +1,23 @@
+[
+  {
+    "Id": 1,
+    "Date": "2025-04-03T00:00:00",
+    "TeamAScore": 2,
+    "TeamBScore": 1,
+    "Notes": "2313"
+  },
+  {
+    "Id": 2,
+    "Date": "2025-04-10T00:00:00",
+    "TeamAScore": 2,
+    "TeamBScore": 3,
+    "Notes": "wfesf"
+  },
+  {
+    "Id": 3,
+    "Date": "2025-03-06T00:00:00",
+    "TeamAScore": 1,
+    "TeamBScore": 0,
+    "Notes": "4"
+  }
+]
