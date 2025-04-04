@@ -1,83 +1,149 @@
-﻿<!-- Views/Home/Dashboard.cshtml -->
-@model DashboardViewModel
+﻿@model DashboardViewModel
 @{
-    ViewData["Title"] = "Dashboard";
+    ViewData["Title"] = "Home";
 }
 
-<div class="status-bar">
-    <div class="status-item">
-        <i class="fas fa-user"></i>
-        Status: <span class="badge @(Model.IsAdmin ? "badge-admin" : "badge-viewer")">@(Model.IsAdmin ? "Admin" : "Viewer")</span>
-    </div>
-    <div class="status-item">
-        <a asp-action="Logout" class="btn btn-danger">
-            <i class="fas fa-sign-out-alt"></i> Logout
-        </a>
-    </div>
-</div>
-
-<h2><i class="fas fa-calendar-alt"></i> Ndeshjet</h2>
-
+<!-- Add Match Button for Admins -->
 @if (Model.IsAdmin)
 {
-    <div id="adminControls">
-        <div class="actions">
-            <a asp-action="AddMatch" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Add New Match
-            </a>
-        </div>
+    <div class="admin-actions">
+        <a asp-action="AddMatch" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add New Match
+        </a>
     </div>
 }
 
-<div class="table-responsive">
-    @if (Model.Matches.Any())
-    {
-        <table id="matchesTable" class="table">
-            <thead>
-                <tr>
-                    <th><i class="fas fa-calendar"></i> Date</th>
-                    <th>ACI</th>
-                    <th>Score</th>
-                    <th>BESI</th>
-                    <th><i class="fas fa-comment"></i> Notes</th>
-                    @if (Model.IsAdmin)
-                    {
-                        <th><i class="fas fa-cog"></i> Actions</th>
-                    }
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var match in Model.Matches)
-                {
-                    <tr>
-                        <td>@match.Date.ToString("dd/MM/yyyy")</td>
-                        <td>ACI</td>
-                        <td class="score @(match.TeamAScore > match.TeamBScore ? "winner" : (match.TeamAScore < match.TeamBScore ? "draw" : ""))">
-                            @match.TeamAScore - @match.TeamBScore
-                        </td>
-                        <td>BESI</td>
-                        <td>@(string.IsNullOrEmpty(match.Notes) ? "-" : match.Notes)</td>
-                        @if (Model.IsAdmin)
-                        {
-                            <td>
-                                <form asp-action="DeleteMatch" method="post">
-                                    <input type="hidden" name="id" value="@match.Id" />
-                                    <button type="submit" class="btn btn-danger action-btn"
-                                            onclick="return confirm('Are you sure you want to delete this match?')">
-                                        <i class="fas fa-trash"></i> Delete
-                                    </button>
-                                </form>
-                            </td>
-                        }
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <div class="no-matches">
-            <i class="fas fa-info-circle"></i> No matches have been recorded yet.
+<!-- Posts Feed -->
+<div class="posts-feed">
+    <!-- Post 1: Match Announcement -->
+    <div class="post">
+        <div class="post-header">
+            <img src="/images/avatars/admin.jpg" alt="Admin" class="post-avatar" onerror="this.src='/images/placeholder.jpg'">
+            <div class="post-meta">
+                <h3>Match Admin</h3>
+                <span class="post-time">Yesterday at 14:30</span>
+            </div>
         </div>
-    }
+        <div class="post-content">
+            <div class="post-text">
+                <p>Next match: ACI vs BESI - This Thursday at 19:00. Don't miss it!</p>
+            </div>
+            <img src="/images/posts/upcoming-match.jpg" alt="Upcoming Match" class="post-image" onerror="this.src='/images/placeholder.jpg'">
+        </div>
+        <div class="post-engagement">
+            <div class="engagement-btn"><i class="far fa-thumbs-up"></i> 24</div>
+            <div class="engagement-btn"><i class="far fa-comment"></i> 8</div>
+            <div class="engagement-btn"><i class="fas fa-share"></i> 3</div>
+        </div>
+    </div>
+
+    <!-- Post 2: Match Results -->
+    <div class="post">
+        <div class="post-header">
+            <img src="/images/avatars/admin.jpg" alt="Admin" class="post-avatar" onerror="this.src='/images/placeholder.jpg'">
+            <div class="post-meta">
+                <h3>Match Admin</h3>
+                <span class="post-time">3 days ago</span>
+            </div>
+        </div>
+        <div class="post-content">
+            <div class="post-text">
+                <p>Match Result: ACI 1 - 0 BESI</p>
+                <p>What a game! ACI takes the win after a competitive match.</p>
+            </div>
+            <img src="/images/posts/match-result.jpg" alt="Match Result" class="post-image" onerror="this.src='/images/placeholder.jpg'">
+        </div>
+        <div class="post-engagement">
+            <div class="engagement-btn"><i class="far fa-thumbs-up"></i> 36</div>
+            <div class="engagement-btn"><i class="far fa-comment"></i> 15</div>
+            <div class="engagement-btn"><i class="fas fa-share"></i> 7</div>
+        </div>
+    </div>
+
+    <!-- Recent Matches Table -->
+    <div class="post">
+        <div class="post-header">
+            <img src="/images/avatars/admin.jpg" alt="Admin" class="post-avatar" onerror="this.src='/images/placeholder.jpg'">
+            <div class="post-meta">
+                <h3>Recent Match History</h3>
+                <span class="post-time">Updated today</span>
+            </div>
+        </div>
+        <div class="post-content">
+            <h3>Recent Matches</h3>
+            <div class="table-responsive">
+                @if (Model.Matches.Any())
+                {
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th><i class="fas fa-calendar"></i> Date</th>
+                                <th>ACI</th>
+                                <th>Score</th>
+                                <th>BESI</th>
+                                @if (Model.IsAdmin)
+                                {
+                                    <th><i class="fas fa-cog"></i> Actions</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var match in Model.Matches.Take(5))
+                            {
+                                <tr>
+                                    <td>@match.Date.ToString("dd/MM/yyyy")</td>
+                                    <td>ACI</td>
+                                    <td class="score @(match.TeamAScore > match.TeamBScore ? "winner" : (match.TeamAScore < match.TeamBScore ? "draw" : ""))">
+                                        @match.TeamAScore - @match.TeamBScore
+                                    </td>
+                                    <td>BESI</td>
+                                    @if (Model.IsAdmin)
+                                    {
+                                        <td>
+                                            <form asp-action="DeleteMatch" method="post">
+                                                <input type="hidden" name="id" value="@match.Id" />
+                                                <button type="submit" class="btn btn-danger action-btn"
+                                                        onclick="return confirm('Are you sure you want to delete this match?')">
+                                                    <i class="fas fa-trash"></i> Delete
+                                                </button>
+                                            </form>
+                                        </td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <div class="no-matches">
+                        <i class="fas fa-info-circle"></i> No matches have been recorded yet.
+                    </div>
+                }
+            </div>
+            <a href="#" class="btn btn-primary">View All Matches</a>
+        </div>
+    </div>
+
+    <!-- Post 3: Fan Discussion -->
+    <div class="post">
+        <div class="post-header">
+            <img src="/images/avatars/fan1.jpg" alt="Fan" class="post-avatar" onerror="this.src='/images/placeholder.jpg'">
+            <div class="post-meta">
+                <h3>Football Fan</h3>
+                <span class="post-time">1 week ago</span>
+            </div>
+        </div>
+        <div class="post-content">
+            <div class="post-text">
+                <p>What an amazing performance by the ACI team last week! The goalkeeper made some incredible saves.</p>
+                <p>Who do you think will be the player of the month?</p>
+            </div>
+        </div>
+        <div class="post-engagement">
+            <div class="engagement-btn"><i class="far fa-thumbs-up"></i> 18</div>
+            <div class="engagement-btn"><i class="far fa-comment"></i> 27</div>
+            <div class="engagement-btn"><i class="fas fa-share"></i> 2</div>
+        </div>
+    </div>
 </div>

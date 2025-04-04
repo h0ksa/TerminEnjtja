@@ -1,0 +1,6 @@
+﻿@model List<PhotoItem>
+
+@foreach (var photo in Model)
+{
+    <img src="@photo.ImageUrl" alt="@photo.Title" class="photo-item" onerror="this.src='/images/placeholder.jpg'" title="@photo.Title">
+}

@@ -1,43 +1,109 @@
-﻿<!-- Views/Shared/_Layout.cshtml -->
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Termin Enjtja</title>
+    <title>@ViewData["Title"] - Termin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1><i class="fas fa-futbol"></i> Termin Enjtja</h1>
+    <div class="main-container">
+        <!-- Top Bar -->
+        <header class="top-bar">
+            <div class="logo">
+                <h1><i class="fas fa-futbol"></i> Termin</h1>
+            </div>
 
-            @if (ViewData.Model is DashboardViewModel dashboardModel)
-            {
-                <div class="stats-container">
-                    <div class="team-stats">
+            <!-- Score Widget -->
+            <div class="score-widget">
+                @if (ViewData.Model is DashboardViewModel dashboardModel)
+                {
+                    <div class="team-score">
                         <span class="team-name">ACI</span>
-                        <span class="wins"><i class="fas fa-trophy"></i> <span id="aciWins">@(dashboardModel.TeamAStats?.Wins ?? 0)</span></span>
-                        <span class="draws"><i class="fas fa-equals"></i> <span id="aciDraws">@(dashboardModel.TeamAStats?.Draws ?? 0)</span></span>
-                        <span class="losses"><i class="fas fa-times"></i> <span id="aciLosses">@(dashboardModel.TeamAStats?.Losses ?? 0)</span></span>
-                    </div>
-                    <div class="team-stats">
+                        <span class="score">@(dashboardModel.TeamAStats?.Wins ?? 0)</span>
+                        <span class="vs">vs</span>
+                        <span class="score">@(dashboardModel.TeamBStats?.Wins ?? 0)</span>
                         <span class="team-name">BESI</span>
-                        <span class="wins"><i class="fas fa-trophy"></i> <span id="besiWins">@(dashboardModel.TeamBStats?.Wins ?? 0)</span></span>
-                        <span class="draws"><i class="fas fa-equals"></i> <span id="besiDraws">@(dashboardModel.TeamBStats?.Draws ?? 0)</span></span>
-                        <span class="losses"><i class="fas fa-times"></i> <span id="besiLosses">@(dashboardModel.TeamBStats?.Losses ?? 0)</span></span>
                     </div>
-                </div>
-            }
+                }
+                else
+                {
+                    <div class="team-score">
+                        <span class="team-name">ACI</span>
+                        <span class="score">-</span>
+                        <span class="vs">vs</span>
+                        <span class="score">-</span>
+                        <span class="team-name">BESI</span>
+                    </div>
+                }
+            </div>
 
+            <!-- User Status -->
+            <div class="user-status">
+                @if (Context.Session.GetString("LoginType") != null)
+                {
+                    <span class="user-type">
+                        <i class="fas fa-user"></i>
+                        @(Context.Session.GetString("LoginType") == "admin" ? "Admin" : "Viewer")
+                    </span>
+                    <a asp-controller="Home" asp-action="Logout" class="btn btn-logout">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                }
+                else
+                {
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-login">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                }
+            </div>
         </header>
 
-        <div class="content">
-            <div id="@(Context.Session.GetString("LoginType") == null ? "loginContainer" : "")">
+        <!-- Three-Column Layout -->
+        <div class="content-wrapper">
+            <!-- Left Sidebar - News Section -->
+            <aside class="sidebar left-sidebar">
+                <h2 class="section-title"><i class="fas fa-newspaper"></i> Latest News</h2>
+                <div class="news-list">
+                    @await Component.InvokeAsync("LatestNews")
+                </div>
+            </aside>
+
+            <!-- Main Content Area -->
+            <main class="main-content">
                 @RenderBody()
-            </div>
+            </main>
+
+            <!-- Right Sidebar - Photos & Ads -->
+            <aside class="sidebar right-sidebar">
+                <h2 class="section-title"><i class="fas fa-camera"></i> Featured Photos</h2>
+                <div class="photos-grid">
+                    @await Component.InvokeAsync("FeaturedPhotos")
+                </div>
+
+                <div class="ad-banner">
+                    <h3>Sponsored</h3>
+                    <div class="ad-content">
+                        <img src="/images/ad-placeholder.jpg" alt="Advertisement" />
+                    </div>
+                </div>
+            </aside>
         </div>
+
+        <!-- Footer -->
+        <footer class="site-footer">
+            <div class="footer-links">
+                <a href="#">About</a>
+                <a href="#">Contact</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+            </div>
+            <div class="copyright">
+                &copy; @DateTime.Now.Year - Termin - All rights reserved
+            </div>
+        </footer>
     </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
