@@ -12,8 +12,8 @@ namespace TerminEnjtja.Controllers
     {
         private readonly IMatchService _matchService;
         private readonly ILogger<HomeController> _logger;
-        private const string ViewerPassword = "1";
-        private const string AdminPassword = "2";
+        private const string ViewerPassword = "97";
+        private const string AdminPassword = "besi1234";
 
         public HomeController(IMatchService matchService, ILogger<HomeController> logger)
         {
@@ -104,12 +104,6 @@ namespace TerminEnjtja.Controllers
                 return View(model);
             }
 
-            // Validate if date is Thursday
-            if (model.Date.DayOfWeek != DayOfWeek.Thursday)
-            {
-                ModelState.AddModelError(nameof(model.Date), "Match date must be a Thursday.");
-                return View(model);
-            }
 
             var match = new Match
             {
@@ -146,7 +140,7 @@ namespace TerminEnjtja.Controllers
         {
             var now = DateTime.Now;
             var daysUntilThursday = ((int)DayOfWeek.Thursday - (int)now.DayOfWeek + 7) % 7;
-            if (daysUntilThursday == 0) daysUntilThursday = 7; // If today is Thursday, get next Thursday
+            if (daysUntilThursday == 0) daysUntilThursday = 7;
             return now.Date.AddDays(daysUntilThursday);
         }
     }
