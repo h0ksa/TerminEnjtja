@@ -3,8 +3,10 @@
 @foreach (var news in Model)
 {
     <div class="news-item">
-        <img src="@news.ImageUrl" alt="@news.Title" class="news-thumbnail" onerror="this.src='/images/placeholder.jpg'">
-        <div class="news-content">
+        <img src="@news.ImageUrl" alt="@news.Title"
+             class="news-thumbnail"
+             loading="lazy"
+             onerror="this.onerror=null;this.classList.add('image-error');this.src='/images/placeholder.jpg'">        <div class="news-content">
             <h3 class="news-title">@news.Title</h3>
             <p class="news-preview">@news.Preview</p>
         </div>

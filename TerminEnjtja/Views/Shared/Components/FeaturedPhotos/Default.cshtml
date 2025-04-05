@@ -2,5 +2,8 @@
 
 @foreach (var photo in Model)
 {
-    <img src="@photo.ImageUrl" alt="@photo.Title" class="photo-item" onerror="this.src='/images/placeholder.jpg'" title="@photo.Title">
+    <img src="@photo.ImageUrl" alt="@photo.Title"
+         class="photo-item"
+         loading="lazy"
+         onerror="this.onerror=null;this.classList.add('image-error');this.src='/images/placeholder.jpg'">
 }
